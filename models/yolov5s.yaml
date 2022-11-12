@@ -8,16 +8,18 @@ width_multiple: 0.50  # layer channel multiple 控制Conv通道channel个数（�
 
 # anchors
 anchors:
-  - [10,13, 16,30, 33,23]  # P3/8  wh  stride=8
+# 9个anchor，其中P表示特征图的层级，P3/8该层特征图缩放为1/8,是第3层特征
+# 在小特征图（feature map）上检测大目标，中等大小的特征图上检测中等目标， 在大特征图上检测小目标。
+  - [10,13, 16,30, 33,23]  # P3/8  wh  stride=8, 表示[10,13],[16,30], [33,23]3个anchor
   - [30,61, 62,45, 59,119]  # P4/16
   - [116,90, 156,198, 373,326]  # P5/32
 
 # YOLOv5 backbone
 backbone:
-  # [from, number, module, args]
-  # from表示当前模块的输入来自那一层的输出，-1表示来自上一层的输出
+  # [from, number, module, args]  args是类的初始化参数，用于解析作为 moudle 的传入参数。
+  # from表示当前模块的输入来自那一层的输出，-1表示来自上一层的输出。[-1, 6]表示从上层和第6层两层获得。
   # number表示本模块重复的次数，1表示只有一个，3表示重复3次
-  # module: 模块名                               [模块输入channel, 模块输出channel, 模块其他参数]
+  # module: 模块名，这些模块在common.py            [模块输入channel, 模块输出channel, 模块其他参数]
   [[-1, 1, Focus, [64, 3]],          # 0-P1/2   [3, 32, 3]
    [-1, 1, Conv, [128, 3, 2]],       # 1-P2/4   [32, 64, 3, 2]
    [-1, 3, C3, [128]],               # 2        [64, 64, 1]
