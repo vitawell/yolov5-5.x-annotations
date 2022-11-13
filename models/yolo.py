@@ -189,7 +189,7 @@ class Detect(nn.Module):
         self.register_buffer('anchor_grid', a.clone().view(self.nl, 1, -1, 1, 1, 2))
         # output conv 对每个输出的feature map都要调用一次conv1x1
         self.m = nn.ModuleList(nn.Conv2d(x, self.no * self.na, 1) for x in ch)
-        # 调用解耦头 DecoupledHead
+        # 调用解耦头 DecoupledHead 要更换self.m；还用要注释掉 Model中的__init__的self._initialize_biases()
         # self.m = nn.ModuleList(DecoupledHead(x, nc, 1, anchors) for x in ch)
         # use in-place ops (e.g. slice assignment) 一般都是True 默认不使用AWS Inferentia加速
         self.inplace = inplace
